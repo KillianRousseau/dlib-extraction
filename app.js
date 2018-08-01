@@ -78,7 +78,7 @@ app.put('/param/:_id', (request, response) =>{
     execp('bash ../lanceur.sh '+id)
     .then(function(result){
       xmltostring(id,data,addr,idExtractor);
-     // cleaner();
+      cleaner();
       response.end(getVersion());
     })
     .catch(function(result){
