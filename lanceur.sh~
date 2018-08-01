@@ -1,0 +1,19 @@
+#!/bin/bash
+#Launch extraction on
+
+if [ $# < 1 ];then
+    echo "Argument : project id"
+    exit 0
+else
+    echo "id : $1"
+    framerate=$(echo $(head -n 1 projects/$1/parameters) | cut -d'=' -f2 | cut -d' ' -f1)
+    duration=$(echo $(head -n 1 projects/$1/parameters) | cut -d'=' -f3 | cut -d'>' -f1)
+    rm -f projects/$1/video.xml
+    #frame extraction
+    mkdir /tmp/face_detection_images
+    let "dim = (($framerate * $duration)/10)+1"
+    ffmpeg -i projects/$1/video.* -r $framerate projects/$1/face_detection_images/image_%0${dim}d.jpg
+    #Face Detection
+    ./dlib_face_detection_recognition_6 projects/$1 $1projects/$1/face_detection_images/image*.jpg
+    echo "Done"
+fi
